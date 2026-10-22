@@ -1,0 +1,634 @@
+<style>
+.ga { display: grid; gap: var(--cds-gap-xl); font-family: var(--font-anthropic-sans); max-width: 82rem; margin-inline: auto; }
+.ga h1 { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); margin: 0; text-wrap: balance; }
+.ga-lede { margin: var(--cds-gap-xs) 0 0; max-width: 72ch; color: var(--color-fg); }
+.ga-lede .ga-v { font-variant-numeric: tabular-nums; font-weight: var(--cds-font-weight-medium); }
+.ga-meta { margin: var(--cds-gap-xs) 0 0; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); max-width: 80ch; }
+.ga-nav { display: flex; flex-wrap: wrap; gap: var(--cds-gap-xs) var(--cds-gap-md); margin-top: var(--cds-gap-sm); font-size: var(--cds-font-size-caption); }
+.ga-nav a { color: var(--color-fg-muted); text-underline-offset: 3px; }
+.ga-nav a:hover { color: var(--color-fg); }
+.ga-section { display: grid; gap: var(--cds-gap-md); scroll-margin-top: var(--cds-gap-lg); }
+.ga-section > header { display: grid; gap: var(--cds-gap-xs); }
+.ga-section h2 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: 0; text-wrap: balance; }
+.ga-sub { margin: 0; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); max-width: 80ch; }
+.ga-card { position: relative; display: grid; gap: var(--cds-gap-sm); align-content: start; min-width: 0; background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); }
+.ga-card h3 { margin: 0; font-size: var(--cds-font-size-body); font-weight: var(--cds-font-weight-medium); text-wrap: balance; }
+.ga-grid { display: grid; gap: var(--cds-gap-md); grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); }
+.ga-tiles { display: grid; gap: var(--cds-gap-md); grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); min-height: 12rem; }
+.ga-tile { gap: var(--cds-gap-xs); }
+.ga-tile .ga-rank { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); font-variant-numeric: tabular-nums; }
+.ga-num { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); line-height: 1.1; font-variant-numeric: tabular-nums; }
+.ga-tile .ga-h { font-weight: var(--cds-font-weight-medium); }
+.ga-tile .ga-d, .ga-tile .ga-u { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin: 0; }
+.ga-tile .ga-u { border-top: 1px solid var(--color-border-line); padding-top: var(--cds-pad-xs); }
+.ga-tile .ga-u b { font-weight: var(--cds-font-weight-medium); color: var(--color-fg); }
+.ga-foot { display: flex; flex-wrap: wrap; align-items: center; gap: var(--cds-gap-xs) var(--cds-gap-sm); margin-top: auto; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.ga-foot a { color: inherit; text-underline-offset: 2px; }
+.ga-chip { display: inline-flex; align-items: center; gap: 5px; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); white-space: nowrap; }
+.ga-dot { flex: none; width: 0.55rem; height: 0.55rem; border-radius: 50%; border: 1.5px solid var(--color-fg-muted); box-sizing: border-box; display: inline-block; }
+.ga-dot[data-v="direct"] { background: var(--color-fg-muted); }
+.ga-dot[data-v="search-official"] { background: linear-gradient(90deg, var(--color-fg-muted) 50%, transparent 50%); }
+.ga-layers { display: flex; flex-wrap: wrap; gap: var(--cds-gap-xs); }
+.ga-layers button { font: inherit; font-size: var(--cds-font-size-caption); padding: var(--cds-pad-xs) var(--cds-pad-sm); border-radius: 999px; border: 1px solid var(--color-border-line); background: var(--color-bg); color: var(--color-fg); cursor: pointer; }
+.ga-layers button:hover { border-color: var(--color-fg-muted); }
+.ga-layers button[aria-pressed="true"] { background: var(--color-fg); color: var(--color-bg); border-color: var(--color-fg); }
+.ga-layers button:focus-visible, .ga-rg:focus-visible, .ga-nav a:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 2px; }
+.ga-atlas { display: grid; gap: var(--cds-gap-lg); grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); align-items: start; }
+.ga-map { position: relative; min-height: 26rem; }
+.ga-map svg.ga-uk { display: block; width: 100%; height: auto; max-height: 46rem; }
+.ga-inset { position: absolute; top: 0; right: 0; width: 36%; background: var(--color-bg); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); }
+.ga-inset svg { display: block; width: 100%; height: auto; }
+.ga-inset span { position: absolute; left: 6px; top: 3px; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.ga-rg { stroke: var(--color-panel); stroke-width: 0.8; cursor: pointer; }
+.ga-inset .ga-rg { stroke: var(--color-bg); }
+.ga-rg:hover, .ga-rg.ga-on { stroke: var(--color-fg); stroke-width: 1.6; }
+.ga-legend { display: flex; flex-wrap: wrap; align-items: center; gap: var(--cds-gap-xs) var(--cds-gap-md); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); font-variant-numeric: tabular-nums; }
+.ga-ramp { display: inline-flex; align-items: center; gap: 6px; }
+.ga-ramp span.ga-sw { display: inline-flex; gap: 2px; }
+.ga-ramp i, .ga-nodata i { display: inline-block; width: 1.1rem; height: 0.65rem; border-radius: 2px; }
+.ga-nodata { display: inline-flex; align-items: center; gap: 6px; }
+.ga-nodata i { background: repeating-linear-gradient(45deg, var(--cds-chart-muted) 0 2px, transparent 2px 5px); border: 1px solid var(--cds-chart-muted); box-sizing: border-box; }
+.ga-note { margin: 0; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); max-width: 75ch; }
+.ga-twrap { overflow-x: auto; }
+table.ga-t { width: 100%; border-collapse: collapse; font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; }
+.ga-t th { text-align: left; font-weight: var(--cds-font-weight-medium); color: var(--color-fg-muted); padding: 4px 6px; border-bottom: 1px solid var(--color-border-line); white-space: nowrap; }
+.ga-t td { padding: 5px 6px; border-bottom: 1px solid var(--color-border-line); vertical-align: middle; }
+.ga-t td.ga-val { white-space: nowrap; }
+.ga-t td.ga-barcell { width: 32%; min-width: 4rem; }
+.ga-t tr.ga-on td { background: var(--cds-chart-reference-tint); }
+.ga-t a { color: inherit; text-underline-offset: 2px; }
+.ga-bar { height: 0.55rem; border-radius: 0 4px 4px 0; }
+.ga-missing { margin: 0; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.ga-chart { position: relative; min-height: 13.5rem; }
+.ga-chart svg { display: block; }
+.ga-mult { display: grid; gap: var(--cds-gap-md) var(--cds-gap-sm); grid-template-columns: repeat(auto-fill, minmax(min(100%, 11rem), 1fr)); min-height: 20rem; }
+.ga-mini { position: relative; min-width: 0; }
+.ga-mini h4 { margin: 0 0 2px; font-size: var(--cds-font-size-caption); font-weight: var(--cds-font-weight-medium); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ga-tick { font-size: var(--cds-font-size-caption); fill: var(--color-fg-muted); font-family: var(--font-anthropic-sans); font-variant-numeric: tabular-nums; }
+.ga-lab { font-size: var(--cds-font-size-caption); fill: var(--color-fg); font-family: var(--font-anthropic-sans); font-variant-numeric: tabular-nums; }
+.ga-gridline { stroke: var(--cds-chart-grid); stroke-width: 1; }
+.ga-axis { stroke: var(--cds-chart-axis); stroke-width: 1; }
+.ga-ref { stroke: var(--cds-chart-reference); stroke-width: 1; stroke-dasharray: 4 3; }
+.ga-tip { position: absolute; z-index: 5; pointer-events: none; max-width: 17rem; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm); font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; }
+.ga-tip .ga-k { color: var(--cds-text-secondary); }
+.ga-tip .ga-sw { display: inline-block; width: 0.55rem; height: 0.55rem; border-radius: 2px; margin-right: 5px; }
+.ga-fail { display: flex; align-items: center; justify-content: center; gap: 6px; min-height: inherit; height: 100%; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.ga-fail::before { content: ""; width: 0.375rem; height: 0.375rem; border-radius: 50%; background: var(--color-bad); }
+.ga-caveats { margin: 0; padding-left: 1.1rem; display: grid; gap: var(--cds-gap-xs); max-width: 80ch; }
+.ga-caveats li { font-size: var(--cds-font-size-caption); color: var(--color-fg); }
+.ga-key { display: flex; flex-wrap: wrap; gap: var(--cds-gap-xs) var(--cds-gap-lg); }
+[data-dash-source-state=empty] { color: transparent; }
+[data-dash-source-state=refreshing] { opacity: 0.5; transition: opacity var(--cds-dur-slow); }
+</style>
+
+<div class="ga">
+  <header id="top">
+    <h1>UK Graduate Market Atlas</h1>
+    <p class="ga-lede" id="lede">
+      Graduate job adverts fell to <span class="ga-v" data-source="key_figures" data-field="display" data-where="id=adzuna_grad">—</span>
+      in July 2026, the lowest Adzuna has recorded, while large employers received
+      <span class="ga-v" data-source="ise_top10" data-field="display" data-where="rank=4">—</span> applications for every graduate vacancy.
+      Pay is London-heavy, and the gap widens with time.
+    </p>
+    <p class="ga-meta">Compiled 22 October 2026 from public sources on the ISE, HESA, DfE, Indeed, Adzuna, High Fliers and Prospects. Every figure links to where it came from and says how it was checked.</p>
+    <nav class="ga-nav" aria-label="Sections">
+      <a href="#ise">ISE top 10</a><a href="#atlas">Regional atlas</a><a href="#postings">Postings by region</a>
+      <a href="#trends">The market over time</a><a href="#fields">Pay and demand by field</a><a href="#method">How to read the figures</a>
+    </nav>
+  </header>
+
+  <section class="ga-section" id="ise">
+    <header>
+      <h2>ISE top 10 stats of 2025</h2>
+      <p class="ga-sub">From the Institute of Student Employers' end-of-year list, with the 2026 survey update where one exists. ISE members are mostly large employers, so these describe the structured graduate schemes rather than the whole market.</p>
+    </header>
+    <div class="ga-tiles dash-skeleton" id="top10" data-source="ise_top10"></div>
+  </section>
+
+  <section class="ga-section" id="atlas">
+    <header>
+      <h2>Regional atlas</h2>
+      <p class="ga-sub">Pick a measure to colour the map. Hover or tap a region for its figure and source. Regions with hatching have no published figure for that measure.</p>
+    </header>
+    <div class="ga-card">
+      <div class="ga-layers" id="atlas-layers" role="group" aria-label="Map measure"></div>
+      <div class="ga-atlas">
+        <div style="display:grid;gap:var(--cds-gap-sm);min-width:0">
+          <div class="ga-map dash-skeleton" id="atlas-map" data-source="map_layers geo"></div>
+          <div class="ga-legend" id="atlas-legend"></div>
+        </div>
+        <div style="display:grid;gap:var(--cds-gap-sm);min-width:0">
+          <h3 id="atlas-title">—</h3>
+          <p class="ga-note" id="atlas-note"></p>
+          <div class="ga-twrap">
+            <table class="ga-t" id="atlas-table" data-source="map_layers" data-row-key="layer,region">
+              <thead><tr>
+                <th data-field="region">Region</th>
+                <th data-field="value_label">Figure</th>
+                <th aria-hidden="true"></th>
+                <th data-field="verification_label">Checked</th>
+                <th data-field="publisher">Source</th>
+              </tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <p class="ga-missing" id="atlas-missing"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ga-section" id="postings">
+    <header>
+      <h2>Job postings by region, 2020 to 2026</h2>
+      <p class="ga-sub">Indeed's job postings index, annual average, where 100 is the level on 1 February 2020. All jobs, not graduate jobs only; 2026 is the year to 16 October. Every panel uses the same scale.</p>
+    </header>
+    <div class="ga-card">
+      <div class="ga-mult dash-skeleton" id="mult" data-source="regional_postings"></div>
+    </div>
+  </section>
+
+  <section class="ga-section" id="trends">
+    <header>
+      <h2>The market over time</h2>
+      <p class="ga-sub">National series. Each chart names its source and population; they are not on a common basis, so compare shapes, not levels.</p>
+    </header>
+    <div class="ga-grid">
+      <div class="ga-card"><h3>Applications per graduate vacancy</h3><p class="ga-note">ISE members. Years with no published figure are left out, so the bars are not evenly spaced in time.</p><div class="ga-chart dash-skeleton" id="c-apps" data-source="national_series"></div></div>
+      <div class="ga-card"><h3>Graduate hiring, change on a year earlier</h3><p class="ga-note">ISE members' graduate vacancies or hires.</p><div class="ga-chart dash-skeleton" id="c-hiring" data-source="national_series"></div></div>
+      <div class="ga-card"><h3>Median graduate salary, 15 months on</h3><p class="ga-note">HESA Graduate Outcomes, UK first-degree graduates in full-time UK work. Cash terms.</p><div class="ga-chart dash-skeleton" id="c-pay" data-source="national_series"></div></div>
+      <div class="ga-card"><h3>Graduates in full-time work, 15 months on</h3><p class="ga-note">HESA Graduate Outcomes, all graduates. The first cohort is classed as experimental.</p><div class="ga-chart dash-skeleton" id="c-ft" data-source="national_series"></div></div>
+      <div class="ga-card"><h3>Employment rate, graduates and non-graduates</h3><p class="ga-note">DfE Graduate Labour Market Statistics, England, ages 16 to 64. Years come from different editions, which DfE revises.</p><div class="ga-chart dash-skeleton" id="c-emp" data-source="national_series"></div></div>
+      <div class="ga-card"><h3>Apprenticeship starts in England</h3><p class="ga-note">DfE, academic years. The apprenticeship levy began in April 2017.</p><div class="ga-chart dash-skeleton" id="c-appr" data-source="national_series"></div></div>
+    </div>
+    <div class="ga-tiles" id="adverts" data-source="key_figures" style="min-height:8rem"></div>
+  </section>
+
+  <section class="ga-section" id="fields">
+    <header>
+      <h2>Pay and demand by field</h2>
+      <p class="ga-sub">What graduates earn by subject, and how job postings in graduate-entry occupations compare with before the pandemic.</p>
+    </header>
+    <div class="ga-grid">
+      <div class="ga-card"><h3>Median salary by subject, 2023/24 graduates</h3><p class="ga-note">HESA Graduate Outcomes, 15 months after graduating. The dashed line is the UK median for all subjects.</p><div class="ga-chart dash-skeleton" id="c-subject" data-source="subject_pay key_figures"></div></div>
+      <div class="ga-card"><h3>Job postings in graduate-entry occupations</h3><p class="ga-note">Indeed job postings index, 16 October 2026; 100 is the level on 1 February 2020. Occupations chosen as common graduate destinations.</p><div class="ga-chart dash-skeleton" id="c-occ" data-source="occupation_postings"></div></div>
+    </div>
+  </section>
+
+  <section class="ga-section" id="method">
+    <header>
+      <h2>How to read the figures</h2>
+      <p class="ga-sub">Research agents gathered these figures from public sources on 22 October 2026. Most publisher websites could not be opened directly from the research environment, so many figures were taken from search results that quote the publisher's own page. Each figure says which.</p>
+    </header>
+    <div class="ga-grid">
+      <div class="ga-card">
+        <h3>How each figure was checked</h3>
+        <div class="ga-key">
+          <span class="ga-chip"><span class="ga-dot" data-v="direct"></span>Read from source data: taken from the publisher's own data file</span>
+          <span class="ga-chip"><span class="ga-dot" data-v="search-official"></span>Official source, via search: quoted from the publisher's page in search results</span>
+          <span class="ga-chip"><span class="ga-dot" data-v="search-secondary"></span>Secondary source: reported by another organisation citing the data</span>
+        </div>
+        <div class="ga-twrap">
+          <table class="ga-t" id="vmix" data-source="verification_mix" data-row-key="verification_label">
+            <thead><tr><th data-field="verification_label">How it was checked</th><th data-field="figures">Figures on this page</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="ga-card">
+        <h3>Caveats</h3>
+        <ul class="ga-caveats">
+          <li>Regional pay at 15 months comes from Luminate's table of HESA data and is labelled an average. HESA's own regional table could not be downloaded, so treat small gaps between regions with care.</li>
+          <li>Earnings five years on (DfE LEO) cover graduates of English universities only, include part-time workers, and come from tax records.</li>
+          <li>Indeed's index counts all job postings, not only graduate roles. It is seasonally adjusted and Indeed revises past values.</li>
+          <li>Apprenticeship starts are counted differently in each nation: academic-year starts in England, funded Modern Apprenticeship starts in Scotland, programmes started in Wales, and all programmes in Northern Ireland.</li>
+          <li>ISE and High Fliers survey large employers. Their changes describe the graduate schemes of those employers, not the whole market.</li>
+          <li>HESA's unemployed share is self-reported and is not an unemployment rate.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+(() => {
+  const REGIONS = ['North East', 'North West', 'Yorkshire and The Humber', 'East Midlands', 'West Midlands', 'East of England', 'London', 'South East', 'South West', 'Wales', 'Scotland', 'Northern Ireland'];
+  // Measures centred on a baseline get a diverging scale; the rest a sequential one.
+  const CENTRE = { job_postings: 100, job_postings_yoy: 0 };
+  const DIVERGING_WORDS = { job_postings: ['Below Feb 2020', 'Above'], job_postings_yoy: ['Fewer than a year ago', 'More'] };
+  const fmtFor = {
+    GBP: (v) => '£' + d3.format(',')(Math.round(v)),
+    GBPk: (v) => '£' + d3.format(',')(v / 1000) + 'k',
+    percent: (v) => d3.format('~g')(v) + '%',
+    pct_change: (v) => (v > 0 ? '+' : v < 0 ? '−' : '') + d3.format('~g')(Math.abs(v)) + '%',
+    count: (v) => Math.abs(v) >= 10000 ? d3.format('~s')(v).replace('G', 'B') : d3.format(',')(v),
+    ratio: (v) => d3.format('~g')(v),
+    index_feb2020_100: (v) => d3.format('~g')(v),
+  };
+  const fmt = (unit, v) => (fmtFor[unit] || fmtFor.ratio)(v);
+
+  const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+  const mark = (e, source, field, where) => { e.dataset.source = source; if (field) e.dataset.field = field; if (where) e.dataset.where = where; return e; };
+  const enc = (s) => encodeURIComponent(s);
+  const safeUrl = (u) => (typeof u === 'string' && /^https:\/\//.test(u) ? u : null);
+  const chip = (row, where, source) => {
+    const c = el('span', 'ga-chip'); const d = el('span', 'ga-dot'); d.dataset.v = row.verification;
+    const t = mark(el('span', null, row.verification_label), source, 'verification_label', where);
+    c.append(d, t); return c;
+  };
+  const srcLink = (row, where, source) => {
+    const url = safeUrl(row.source_url);
+    const a = el(url ? 'a' : 'span', null, row.publisher);
+    if (url) { a.href = url; a.target = '_blank'; a.rel = 'noopener'; }
+    return mark(a, source, 'publisher', where);
+  };
+  const failLine = () => el('div', 'ga-fail', 'Failed to load');
+  // Returns each dataset's rows when all are loaded; otherwise draws the loading or failed state.
+  function guard(box, ids) {
+    const ds = ids.map((id) => dash.data(id));
+    if (ds.some((d) => ['error', 'missing', 'connect', 'declined'].includes(d.status))) { box.classList.remove('dash-skeleton'); box.replaceChildren(failLine()); return null; }
+    if (ds.some((d) => d.status !== 'ok')) { box.classList.add('dash-skeleton'); box.replaceChildren(); return null; }
+    box.classList.remove('dash-skeleton');
+    return ds.map((d) => (Array.isArray(d.data) ? d.data : []));
+  }
+
+  // ---------- tooltip
+  function tip(box) { const t = el('div', 'ga-tip'); t.hidden = true; box.append(t); return t; }
+  function showTip(box, t, ev, title, lines) {
+    t.replaceChildren(el('div', 'ga-k', title), ...lines.map((l) => {
+      const d = el('div');
+      if (l.color) { const s = el('span', 'ga-sw'); s.style.background = l.color; d.append(s); }
+      d.append(document.createTextNode(l.text)); return d;
+    }));
+    t.hidden = false;
+    const r = box.getBoundingClientRect(), w = t.offsetWidth, h = t.offsetHeight;
+    let x = ev.clientX - r.left + 14, y = ev.clientY - r.top + 14;
+    if (x + w > r.width) x = Math.max(0, ev.clientX - r.left - w - 14);
+    if (y + h > r.height) y = Math.max(0, ev.clientY - r.top - h - 14);
+    t.style.left = x + 'px'; t.style.top = y + 'px';
+  }
+  const sourceLine = (r) => ({ text: `${r.publisher} · ${r.verification_label}` });
+
+  function textWidth(svg, s, cls) { const t = svg.append('text').attr('class', cls || 'ga-tick').text(s); const w = t.node().getComputedTextLength(); t.remove(); return w; }
+  function fitText(svg, s, maxW, cls) {
+    if (textWidth(svg, s, cls) <= maxW) return s;
+    let n = s.length; while (n > 3 && textWidth(svg, s.slice(0, n) + '…', cls) > maxW) n--; return s.slice(0, n) + '…';
+  }
+  function xLabels(svg, labels, x, y0) {
+    const inner = x.range()[1] - x.range()[0];
+    const widest = d3.max(labels, (l) => textWidth(svg, l)) + 10;
+    const step = Math.max(1, Math.ceil(labels.length / Math.max(2, Math.floor(inner / widest))));
+    const last = labels.length - 1;
+    const show = labels.map((_, i) => (i === last) || (i % step === 0 && last - i >= step));
+    svg.append('g').selectAll('text').data(labels.filter((_, i) => show[i])).join('text')
+      .attr('class', 'ga-tick').attr('x', (l) => x(l) + (x.bandwidth ? x.bandwidth() / 2 : 0)).attr('y', y0).attr('text-anchor', 'middle').text((l) => l);
+  }
+
+  // ---------- line chart: series = [{name, color, rows:[{label, value, value_label, ...}]}]
+  function lineChart(box, series, o) {
+    box.replaceChildren();
+    const W = Math.max(240, box.clientWidth), H = o.height || 216;
+    const svg = d3.select(box).append('svg').attr('viewBox', `0 0 ${W} ${H}`).attr('width', '100%').attr('role', 'img').attr('aria-label', o.label);
+    const labels = series[0].rows.map((r) => r.label);
+    const vals = series.flatMap((s) => s.rows.map((r) => r.value));
+    const y = d3.scaleLinear(o.domain || d3.extent(vals), [H - 26, 14]).nice(4);
+    const ticks = y.ticks(4);
+    const ml = d3.max(ticks, (t) => textWidth(svg, fmt(o.tickUnit || o.unit, t))) + 10;
+    const endText = (s) => (series.length > 1 ? `${s.name} ${s.rows.at(-1).value_label}` : s.rows.at(-1).value_label);
+    const mr = d3.max(series, (s) => textWidth(svg, endText(s), 'ga-lab')) + 12;
+    const x = d3.scalePoint(labels, [ml, W - mr]).padding(0.25);
+    svg.append('g').selectAll('line').data(ticks).join('line').attr('class', 'ga-gridline').attr('x1', ml).attr('x2', W - mr + 4).attr('y1', (t) => y(t)).attr('y2', (t) => y(t));
+    svg.append('g').selectAll('text').data(ticks).join('text').attr('class', 'ga-tick').attr('x', ml - 6).attr('y', (t) => y(t) + 4).attr('text-anchor', 'end').text((t) => fmt(o.tickUnit || o.unit, t));
+    xLabels(svg, labels, x, H - 6);
+    (o.marks || []).forEach((m) => {
+      if (x(m.at) == null) return;
+      svg.append('line').attr('class', 'ga-ref').attr('x1', x(m.at)).attr('x2', x(m.at)).attr('y1', 10).attr('y2', H - 26);
+      const tx = svg.append('text').attr('class', 'ga-tick').attr('x', x(m.at) + 4).attr('y', 12).text(m.text);
+      if (x(m.at) + 4 + tx.node().getComputedTextLength() > W - mr) tx.attr('x', x(m.at) - 4).attr('text-anchor', 'end');
+    });
+    const line = d3.line().x((r) => x(r.label)).y((r) => y(r.value));
+    const ends = [];
+    series.forEach((s) => {
+      svg.append('path').attr('d', line(s.rows)).style('fill', 'none').style('stroke', s.color).attr('stroke-width', 2).attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round');
+      svg.append('g').selectAll('circle').data(s.rows).join('circle').attr('cx', (r) => x(r.label)).attr('cy', (r) => y(r.value)).attr('r', 3.5).style('fill', s.color).style('stroke', 'var(--color-panel)').attr('stroke-width', 2);
+      const last = s.rows.at(-1); ends.push({ s, y: y(last.value) + 4, x: x(last.label) + 8 });
+    });
+    ends.sort((a, b) => a.y - b.y); for (let i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 14) ends[i].y = ends[i - 1].y + 14;
+    ends.forEach((e) => svg.append('text').attr('class', 'ga-lab').attr('x', e.x).attr('y', e.y).text(endText(e.s)));
+    // hover: nearest label
+    const t = tip(box);
+    const rule = svg.append('line').attr('class', 'ga-axis').attr('y1', 14).attr('y2', H - 26).style('opacity', 0);
+    svg.append('rect').attr('x', ml).attr('y', 0).attr('width', Math.max(0, W - mr - ml)).attr('height', H).style('fill', 'transparent')
+      .on('pointermove', (ev) => {
+        const [px] = d3.pointer(ev); const lab = labels[d3.leastIndex(labels, (l) => Math.abs(x(l) - px))];
+        rule.attr('x1', x(lab)).attr('x2', x(lab)).style('opacity', 1);
+        const rs = series.map((s) => ({ s, r: s.rows.find((r) => r.label === lab) })).filter((d) => d.r);
+        showTip(box, t, ev, lab, [...rs.map(({ s, r }) => ({ text: (series.length > 1 ? s.name + ': ' : '') + r.value_label, color: series.length > 1 ? s.color : null })), sourceLine(rs[0].r)]);
+      })
+      .on('pointerleave', () => { t.hidden = true; rule.style('opacity', 0); });
+  }
+
+  // ---------- vertical bar chart
+  function barChart(box, rows, o) {
+    box.replaceChildren();
+    const W = Math.max(240, box.clientWidth), H = o.height || 216;
+    const svg = d3.select(box).append('svg').attr('viewBox', `0 0 ${W} ${H}`).attr('width', '100%').attr('role', 'img').attr('aria-label', o.label);
+    const vals = rows.map((r) => r.value);
+    const y = d3.scaleLinear([Math.min(0, d3.min(vals)), Math.max(0, d3.max(vals))], [H - 26, 18]).nice(4);
+    const ticks = y.ticks(4);
+    const ml = d3.max(ticks, (t) => textWidth(svg, fmt(o.unit, t))) + 10;
+    const x = d3.scaleBand(rows.map((r) => r.label), [ml, W - 4]).padding(0.3);
+    svg.append('g').selectAll('line').data(ticks).join('line').attr('class', 'ga-gridline').attr('x1', ml).attr('x2', W - 4).attr('y1', (t) => y(t)).attr('y2', (t) => y(t));
+    svg.append('g').selectAll('text').data(ticks).join('text').attr('class', 'ga-tick').attr('x', ml - 6).attr('y', (t) => y(t) + 4).attr('text-anchor', 'end').text((t) => fmt(o.unit, t));
+    xLabels(svg, rows.map((r) => r.label), x, H - 6);
+    const bw = Math.min(32, x.bandwidth()), off = (x.bandwidth() - bw) / 2;
+    svg.append('g').selectAll('rect').data(rows).join('rect')
+      .attr('x', (r) => x(r.label) + off).attr('width', bw)
+      .attr('y', (r) => y(Math.max(0, r.value))).attr('height', (r) => Math.max(1, Math.abs(y(r.value) - y(0)))).attr('rx', 4)
+      .style('fill', o.color);
+    svg.append('line').attr('class', 'ga-axis').attr('x1', ml).attr('x2', W - 4).attr('y1', y(0)).attr('y2', y(0));
+    if (bw >= 22) svg.append('g').selectAll('text').data(rows).join('text').attr('class', 'ga-lab').attr('text-anchor', 'middle')
+      .attr('x', (r) => x(r.label) + x.bandwidth() / 2).attr('y', (r) => (r.value >= 0 ? y(r.value) - 5 : y(r.value) + 13)).text((r) => r.value_label);
+    const t = tip(box);
+    svg.append('g').selectAll('rect').data(rows).join('rect').attr('x', (r) => x(r.label)).attr('width', x.bandwidth()).attr('y', 0).attr('height', H).style('fill', 'transparent')
+      .on('pointermove', (ev, r) => showTip(box, t, ev, r.label, [{ text: r.value_label }, ...(r.note ? [{ text: r.note }] : []), sourceLine(r)]))
+      .on('pointerleave', () => { t.hidden = true; });
+  }
+
+  // ---------- horizontal bars from a base value
+  function hBars(box, rows, o) {
+    box.replaceChildren();
+    const W = Math.max(240, box.clientWidth), rowH = 24, top = 18, H = top + rows.length * rowH + 4;
+    const svg = d3.select(box).append('svg').attr('viewBox', `0 0 ${W} ${H}`).attr('width', '100%').attr('role', 'img').attr('aria-label', o.label);
+    const labW = Math.min(d3.max(rows, (r) => textWidth(svg, r.name, 'ga-lab')), W * 0.42);
+    const valW = d3.max(rows, (r) => textWidth(svg, r.value_label, 'ga-lab')) + 6;
+    const base = o.base ?? 0;
+    const vals = rows.map((r) => r.value).concat([base, o.ref ?? base]);
+    const x = d3.scaleLinear([Math.min(...vals), Math.max(...vals)], [labW + 10, W - valW - 4]).nice();
+    const yy = (i) => top + i * rowH;
+    if (o.ref != null) {
+      svg.append('line').attr('class', 'ga-ref').attr('x1', x(o.ref)).attr('x2', x(o.ref)).attr('y1', top - 4).attr('y2', H - 2);
+      const tx = svg.append('text').attr('class', 'ga-tick').attr('x', x(o.ref)).attr('y', 11).attr('text-anchor', 'middle').text(o.refText);
+      const tw = tx.node().getComputedTextLength();
+      if (x(o.ref) + tw / 2 > W) tx.attr('text-anchor', 'end').attr('x', W);
+    }
+    const g = svg.append('g').selectAll('g').data(rows).join('g').attr('transform', (_, i) => `translate(0,${yy(i)})`);
+    g.append('text').attr('class', 'ga-lab').attr('x', labW).attr('y', rowH / 2 + 4).attr('text-anchor', 'end').text((r) => fitText(svg, r.name, labW, 'ga-lab'));
+    g.append('rect').attr('x', (r) => x(Math.min(base, r.value))).attr('width', (r) => Math.max(1, Math.abs(x(r.value) - x(base))))
+      .attr('y', 5).attr('height', rowH - 10).attr('rx', 4).style('fill', (r) => (o.colorOf ? o.colorOf(r) : o.color));
+    g.append('text').attr('class', 'ga-lab').attr('x', W - 2).attr('y', rowH / 2 + 4).attr('text-anchor', 'end').text((r) => r.value_label);
+    if (o.base != null) svg.append('line').attr('class', 'ga-axis').attr('x1', x(base)).attr('x2', x(base)).attr('y1', top - 4).attr('y2', H - 2);
+    const t = tip(box);
+    g.append('rect').attr('x', 0).attr('width', W).attr('height', rowH).style('fill', 'transparent')
+      .on('pointermove', (ev, r) => showTip(box, t, ev, r.name, [{ text: r.value_label }, sourceLine(r)]))
+      .on('pointerleave', () => { t.hidden = true; });
+  }
+
+  // ---------- ISE top 10 tiles
+  function drawTop10() {
+    const box = document.getElementById('top10');
+    const got = guard(box, ['ise_top10']); if (!got) return;
+    const rows = got[0].slice().sort((a, b) => a.rank - b.rank);
+    box.replaceChildren(...rows.map((r) => {
+      const w = `rank=${r.rank}`, S = 'ise_top10';
+      const card = el('article', 'ga-card ga-tile');
+      const rk = el('div', 'ga-rank'); rk.append('No. ', mark(el('span', null, String(r.rank)), S, 'rank', w));
+      card.append(rk, mark(el('div', 'ga-num', r.display), S, 'display', w), mark(el('div', 'ga-h', r.headline), S, 'headline', w),
+        mark(el('p', 'ga-d', r.detail), S, 'detail', w));
+      if (r.update_2026) { const u = el('p', 'ga-u'); u.append(el('b', null, 'Update: '), mark(el('span', null, r.update_2026), S, 'update_2026', w)); card.append(u); }
+      const f = el('div', 'ga-foot'); f.append(chip(r, w, S), srcLink(r, w, S)); card.append(f);
+      return card;
+    }));
+  }
+
+  // ---------- key figure tiles (graduate adverts)
+  function drawAdverts() {
+    const box = document.getElementById('adverts');
+    const got = guard(box, ['key_figures']); if (!got) return;
+    const ids = ['adzuna_grad', 'adzuna_grad_yoy', 'indeed_grad_yoy', 'highfliers_cum'];
+    const rows = ids.map((id) => got[0].find((r) => r.id === id)).filter(Boolean);
+    box.replaceChildren(...rows.map((r) => {
+      const w = `id=${enc(r.id)}`, S = 'key_figures';
+      const card = el('article', 'ga-card ga-tile');
+      card.append(mark(el('div', 'ga-num', r.display), S, 'display', w), mark(el('div', 'ga-h', r.label), S, 'label', w), mark(el('p', 'ga-d', r.detail), S, 'detail', w));
+      const f = el('div', 'ga-foot'); f.append(chip(r, w, S), srcLink(r, w, S)); card.append(f);
+      return card;
+    }));
+  }
+
+  // ---------- atlas
+  let layer = 'grad_pay_15m', picked = null;
+  function drawAtlas() {
+    const mapBox = document.getElementById('atlas-map');
+    const tbody = document.querySelector('#atlas-table tbody');
+    const got = guard(mapBox, ['map_layers', 'geo']);
+    if (!got) { tbody.replaceChildren(); return; }
+    const [ml, geo] = got;
+    const layers = d3.groups(ml, (d) => d.layer).map(([id, rs]) => ({ id, title: rs[0].layer_title, note: rs[0].layer_note, rows: rs }));
+    if (!layers.length) { mapBox.replaceChildren(failLine()); return; }
+    if (!layers.some((l) => l.id === layer)) layer = layers[0].id;
+    const L = layers.find((l) => l.id === layer);
+
+    const chips = document.getElementById('atlas-layers');
+    chips.replaceChildren(...layers.map((l) => {
+      const b = el('button', null, l.title); b.type = 'button'; b.setAttribute('aria-pressed', String(l.id === layer));
+      b.addEventListener('click', () => { layer = l.id; picked = null; drawAtlas(); });
+      return b;
+    }));
+    document.getElementById('atlas-title').textContent = L.title;
+    document.getElementById('atlas-note').textContent = L.note;
+
+    const byRegion = new Map(L.rows.map((r) => [r.region, r]));
+    const vals = L.rows.map((r) => r.value);
+    const centre = CENTRE[layer];
+    let colorOf, steps, ends;
+    if (centre != null) {
+      const m = d3.max(vals, (v) => Math.abs(v - centre)) || 1;
+      const q = d3.scaleQuantize([centre - m, centre + m], [7, 6, 5, 4, 3, 2, 1]);
+      colorOf = (v) => `var(--cds-chart-diverging-${q(v)})`; steps = [7, 6, 5, 4, 3, 2, 1].map((i) => `var(--cds-chart-diverging-${i})`);
+      ends = DIVERGING_WORDS[layer];
+    } else {
+      const q = d3.scaleQuantize(d3.extent(vals), [1, 2, 3, 4, 5, 6, 7]);
+      colorOf = (v) => `var(--cds-chart-sequential-${q(v)})`; steps = [1, 2, 3, 4, 5, 6, 7].map((i) => `var(--cds-chart-sequential-${i})`);
+      const u = L.rows[0].unit; ends = [fmt(u, d3.min(vals)), fmt(u, d3.max(vals))];
+    }
+
+    // legend
+    const lg = document.getElementById('atlas-legend');
+    const ramp = el('span', 'ga-ramp'); const sw = el('span', 'ga-sw');
+    steps.forEach((c) => { const i = el('i'); i.style.background = c; sw.append(i); });
+    ramp.append(el('span', null, ends[0]), sw, el('span', null, ends[1]));
+    const nd = el('span', 'ga-nodata'); nd.append(el('i'), el('span', null, 'No figure'));
+    lg.replaceChildren(ramp, ...(L.rows.length < REGIONS.length ? [nd] : []));
+
+    // map
+    mapBox.replaceChildren();
+    const t = tip(mapBox);
+    const hatch = (svg, id) => {
+      const p = svg.append('defs').append('pattern').attr('id', id).attr('width', 6).attr('height', 6).attr('patternUnits', 'userSpaceOnUse').attr('patternTransform', 'rotate(45)');
+      p.append('rect').attr('width', 6).attr('height', 6).style('fill', 'var(--color-panel)');
+      p.append('line').attr('x1', 0).attr('y1', 0).attr('x2', 0).attr('y2', 6).style('stroke', 'var(--cds-chart-muted)').attr('stroke-width', 2.5);
+    };
+    const paint = (sel, hatchId) => sel
+      .attr('class', (d) => 'ga-rg' + (d.region === picked ? ' ga-on' : ''))
+      .attr('d', (d) => d.d).attr('tabindex', 0).attr('role', 'button')
+      .attr('aria-label', (d) => `${d.region}: ${byRegion.get(d.region)?.value_label ?? 'no figure'}`)
+      .style('fill', (d) => (byRegion.has(d.region) ? colorOf(byRegion.get(d.region).value) : `url(#${hatchId})`))
+      .on('pointermove', (ev, d) => hover(ev, d.region))
+      .on('pointerleave', () => { t.hidden = true; highlight(picked); })
+      .on('click', (ev, d) => { picked = picked === d.region ? null : d.region; highlight(picked); })
+      .on('keydown', (ev, d) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); picked = picked === d.region ? null : d.region; highlight(picked); } });
+    const uk = d3.select(mapBox).append('svg').attr('class', 'ga-uk').attr('viewBox', '0 0 560 760').attr('role', 'img').attr('aria-label', `Map of UK regions coloured by ${L.title.toLowerCase()}`);
+    hatch(uk, 'ga-hatch-uk');
+    paint(uk.append('g').selectAll('path').data(geo.filter((g) => g.view === 'uk')).join('path'), 'ga-hatch-uk');
+    const insetBox = el('div', 'ga-inset'); mapBox.append(insetBox);
+    const inset = d3.select(insetBox).append('svg').attr('viewBox', '0 0 220 170').attr('aria-label', 'London close-up');
+    hatch(inset, 'ga-hatch-ld');
+    paint(inset.append('g').selectAll('path').data(geo.filter((g) => g.view === 'london')).join('path'), 'ga-hatch-ld');
+    insetBox.append(el('span', null, 'London'));
+    mapBox.append(t);
+
+    function hover(ev, region) {
+      highlight(region);
+      const r = byRegion.get(region);
+      showTip(mapBox, t, ev, region, r ? [{ text: r.value_label }, { text: r.period }, sourceLine(r)] : [{ text: 'No published figure found for this measure' }]);
+    }
+    function highlight(region) {
+      d3.select(mapBox).selectAll('path.ga-rg').classed('ga-on', (d) => d.region === region);
+      tbody.querySelectorAll('tr').forEach((tr) => tr.classList.toggle('ga-on', tr.dataset.region === region));
+    }
+
+    // ranked table
+    const sorted = L.rows.slice().sort((a, b) => b.value - a.value);
+    const lo = Math.min(centre ?? 0, d3.min(vals)), hi = Math.max(centre ?? 0, d3.max(vals));
+    const bx = d3.scaleLinear([lo, hi], [0, 100]);
+    tbody.replaceChildren(...sorted.map((r) => {
+      const tr = el('tr'); tr.dataset.key = `${enc(r.layer)},${enc(r.region)}`; tr.dataset.region = r.region;
+      if (r.region === picked) tr.classList.add('ga-on');
+      const barTd = el('td', 'ga-barcell'); const bar = el('div', 'ga-bar');
+      const b0 = bx(centre ?? lo), b1 = bx(r.value);
+      bar.style.marginLeft = Math.min(b0, b1) + '%'; bar.style.width = Math.max(1, Math.abs(b1 - b0)) + '%';
+      bar.style.background = colorOf(r.value);
+      bar.style.borderRadius = r.value < (centre ?? -Infinity) ? '4px 0 0 4px' : '0 4px 4px 0';
+      barTd.append(bar);
+      const src = el('td'); const url = safeUrl(r.source_url); const a = el(url ? 'a' : 'span', null, r.publisher);
+      if (url) { a.href = url; a.target = '_blank'; a.rel = 'noopener'; } src.append(a);
+      const ver = el('td'); const d = el('span', 'ga-chip'); const dot = el('span', 'ga-dot'); dot.dataset.v = r.verification; d.append(dot, document.createTextNode(r.verification_label)); ver.append(d);
+      tr.append(el('td', null, r.region), el('td', 'ga-val', r.value_label), barTd, ver, src);
+      tr.addEventListener('pointerenter', () => highlight(r.region));
+      tr.addEventListener('pointerleave', () => highlight(picked));
+      return tr;
+    }));
+    const missing = REGIONS.filter((g) => !byRegion.has(g));
+    document.getElementById('atlas-missing').textContent = missing.length ? `No figure found for: ${missing.join(', ')}.` : '';
+  }
+
+  // ---------- small multiples
+  function drawMultiples() {
+    const box = document.getElementById('mult');
+    const got = guard(box, ['regional_postings']); if (!got) return;
+    const rows = got[0];
+    const byR = d3.group(rows, (r) => r.region);
+    const years = Array.from(new Set(rows.map((r) => r.year))).sort();
+    const y0 = Math.min(100, d3.min(rows, (r) => r.value)), y1 = Math.max(100, d3.max(rows, (r) => r.value));
+    box.replaceChildren();
+    REGIONS.filter((g) => byR.has(g)).forEach((region) => {
+      const rs = byR.get(region).slice().sort((a, b) => a.year - b.year);
+      const cell = el('div', 'ga-mini'); cell.append(el('h4', null, region)); box.append(cell);
+      const W = Math.max(150, cell.clientWidth), H = 96;
+      const svg = d3.select(cell).append('svg').attr('viewBox', `0 0 ${W} ${H}`).attr('width', '100%').attr('role', 'img').attr('aria-label', `${region} job postings index by year`);
+      const last = rs.at(-1);
+      const mr = textWidth(svg, last.value_label, 'ga-lab') + 8;
+      const x = d3.scalePoint(years, [4, W - mr]);
+      const y = d3.scaleLinear([y0, y1], [H - 16, 6]).nice();
+      svg.append('line').attr('class', 'ga-ref').attr('x1', 4).attr('x2', W - mr).attr('y1', y(100)).attr('y2', y(100));
+      svg.append('path').attr('d', d3.line().x((r) => x(r.year)).y((r) => y(r.value))(rs)).style('fill', 'none').style('stroke', dash.colors[0]).attr('stroke-width', 2).attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round');
+      svg.append('circle').attr('cx', x(last.year)).attr('cy', y(last.value)).attr('r', 3.5).style('fill', dash.colors[0]).style('stroke', 'var(--color-panel)').attr('stroke-width', 2);
+      svg.append('text').attr('class', 'ga-lab').attr('x', x(last.year) + 6).attr('y', y(last.value) + 4).text(last.value_label);
+      svg.append('text').attr('class', 'ga-tick').attr('x', 4).attr('y', H - 2).text(String(years[0]));
+      svg.append('text').attr('class', 'ga-tick').attr('x', W - mr).attr('y', H - 2).attr('text-anchor', 'end').text(String(years.at(-1)));
+      const t = tip(cell);
+      svg.append('rect').attr('width', W).attr('height', H).style('fill', 'transparent')
+        .on('pointermove', (ev) => { const [px] = d3.pointer(ev); const r = rs[d3.leastIndex(rs, (d) => Math.abs(x(d.year) - px))]; showTip(cell, t, ev, `${region}, ${r.year}`, [{ text: `Index ${r.value_label}` }, sourceLine(r)]); })
+        .on('pointerleave', () => { t.hidden = true; });
+    });
+  }
+
+  // ---------- national series
+  function drawTrends() {
+    const ids = ['c-apps', 'c-hiring', 'c-pay', 'c-ft', 'c-emp', 'c-appr'];
+    const boxes = ids.map((id) => document.getElementById(id));
+    const got = boxes.map((b) => guard(b, ['national_series']));
+    if (!got[0]) return;
+    const rows = got[0][0];
+    const S = (id) => rows.filter((r) => r.series === id).sort((a, b) => a.order - b.order);
+    const c = dash.colors;
+    const has = (id) => S(id).length > 0;
+    const empty = (b) => b.replaceChildren(el('div', 'ga-fail', 'No data'));
+    has('apps_per_vacancy') ? barChart(boxes[0], S('apps_per_vacancy'), { unit: 'ratio', color: c[0], label: 'Applications per graduate vacancy by year' }) : empty(boxes[0]);
+    has('grad_hiring_change') ? barChart(boxes[1], S('grad_hiring_change'), { unit: 'pct_change', color: c[0], label: 'Graduate hiring change by year' }) : empty(boxes[1]);
+    has('grad_pay_median') ? lineChart(boxes[2], [{ name: 'Median', color: c[0], rows: S('grad_pay_median') }], { unit: 'GBP', tickUnit: 'GBPk', label: 'Median graduate salary by cohort' }) : empty(boxes[2]);
+    has('ft_employment') ? lineChart(boxes[3], [{ name: 'Full-time work', color: c[0], rows: S('ft_employment') }], { unit: 'percent', domain: [50, 65], label: 'Share of graduates in full-time work by cohort' }) : empty(boxes[3]);
+    has('emp_rate_graduates') ? lineChart(boxes[4], [
+      { name: 'Graduates', color: c[0], rows: S('emp_rate_graduates') },
+      { name: 'Non-graduates', color: c[1], rows: S('emp_rate_nongraduates') },
+    ], { unit: 'percent', domain: [60, 95], label: 'Employment rate of graduates and non-graduates by year' }) : empty(boxes[4]);
+    has('appr_starts_england') ? lineChart(boxes[5], [{ name: 'Starts', color: c[0], rows: S('appr_starts_england') }], { unit: 'count', domain: [0, 550000], label: 'Apprenticeship starts in England by year', marks: [{ at: '2017/18', text: 'Levy' }] }) : empty(boxes[5]);
+  }
+
+  // ---------- fields
+  function drawFields() {
+    const sb = document.getElementById('c-subject');
+    const g1 = guard(sb, ['subject_pay', 'key_figures']);
+    if (g1) {
+      const [subj, key] = g1;
+      const uk = key.find((r) => r.id === 'hesa_pay');
+      const rs = subj.map((r) => ({ ...r, name: r.subject })).sort((a, b) => b.value - a.value);
+      hBars(sb, rs, { color: dash.colors[0], ref: uk?.value, refText: uk ? `UK median ${uk.value_label}` : '', label: 'Median graduate salary by subject' });
+    }
+    const ob = document.getElementById('c-occ');
+    const g2 = guard(ob, ['occupation_postings']);
+    if (g2) {
+      const rs = g2[0].map((r) => ({ ...r, name: r.occupation })).sort((a, b) => b.value - a.value);
+      hBars(ob, rs, { base: 100, colorOf: (r) => (r.value >= 100 ? dash.colors[0] : 'var(--cds-chart-muted)'), label: 'Job postings index by occupation' });
+    }
+  }
+
+  // ---------- verification mix
+  dash.calc('verification_mix', {
+    title: 'Figures by how they were checked',
+    description: 'Counts every figure on this dashboard by how it was verified.',
+    inputs: ['map_layers', 'regional_postings', 'national_series', 'subject_pay', 'occupation_postings', 'ise_top10', 'key_figures'],
+    fn: (map_layers, regional_postings, national_series, subject_pay, occupation_postings, ise_top10, key_figures) => {
+      const n = {};
+      for (const r of [...map_layers, ...regional_postings, ...national_series, ...subject_pay, ...occupation_postings, ...ise_top10, ...key_figures]) n[r.verification_label] = (n[r.verification_label] || 0) + 1;
+      return Object.entries(n).map(([verification_label, figures]) => ({ verification_label, figures }));
+    },
+  });
+  function drawMix() {
+    const tbody = document.querySelector('#vmix tbody');
+    const d = dash.data('verification_mix');
+    if (d.status !== 'ok' || !Array.isArray(d.data)) { tbody.replaceChildren(); return; }
+    tbody.replaceChildren(...d.data.slice().sort((a, b) => b.figures - a.figures).map((r) => {
+      const tr = el('tr'); tr.dataset.key = enc(r.verification_label);
+      tr.append(el('td', null, r.verification_label), el('td', null, d3.format(',')(r.figures))); return tr;
+    }));
+  }
+
+  // ---------- section links
+  document.querySelectorAll('.ga-nav a').forEach((a) => a.addEventListener('click', (ev) => {
+    const target = document.getElementById(a.getAttribute('href').slice(1));
+    if (!target) return; ev.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); dash.setLink(target.id);
+  }));
+  let linked = false;
+
+  dash.onData(() => {
+    drawTop10(); drawAtlas(); drawMultiples(); drawTrends(); drawAdverts(); drawFields(); drawMix();
+    if (!linked && dash.data('map_layers').status === 'ok') {
+      linked = true;
+      const named = location.hash && document.getElementById(location.hash.slice(1));
+      if (named) named.scrollIntoView();
+    }
+  });
+})();
+</script>
